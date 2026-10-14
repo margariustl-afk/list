@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Lista | Organizador compartido</title>
+<style>
+:root{--blue:#2563eb;--blue2:#1d4ed8;--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#667085;--border:#e4e7ec;--red:#dc2626;--green:#15803d;--amber:#b45309;--shadow:0 10px 28px rgba(16,24,40,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}.login{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{width:min(430px,100%);background:#fff;border:1px solid var(--border);border-radius:22px;padding:28px;box-shadow:var(--shadow)}.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--blue),#60a5fa);display:grid;place-items:center;color:#fff;font-size:24px;font-weight:800}.brand h1{font-size:22px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}.field{display:grid;gap:7px;margin-bottom:14px}.field label{font-size:13px;font-weight:700}.field input,.field select,.field textarea{width:100%;min-height:46px;border:1px solid #cfd5df;border-radius:11px;padding:11px 12px;background:#fff;color:var(--text);outline:none}.field textarea{min-height:88px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12)}.btn{border:0;border-radius:11px;min-height:44px;padding:10px 15px;font-weight:750;background:#eef2f6;color:#263244}.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue2)}.btn-danger{background:#fee2e2;color:#991b1b}.btn-success{background:#dcfce7;color:#166534}.btn-block{width:100%}.msg{margin-top:12px;font-size:13px;color:var(--red);min-height:18px}.shell{display:grid;grid-template-columns:245px minmax(0,1fr);min-height:100vh}.sidebar{background:#101828;color:#fff;padding:20px 14px;position:sticky;top:0;height:100vh}.side-brand{padding:5px 10px 22px}.side-brand strong{font-size:21px}.side-brand small{display:block;color:#98a2b3;margin-top:4px}.nav{display:grid;gap:6px}.nav button{border:0;text-align:left;padding:12px 13px;border-radius:10px;background:transparent;color:#d0d5dd;font-weight:700}.nav button.active,.nav button:hover{background:#1d2939;color:#fff}.main{min-width:0}.topbar{height:70px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:15px;position:sticky;top:0;z-index:10}.userbox{min-width:0}.userbox strong,.userbox small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.userbox small{color:var(--muted);margin-top:2px}.content{padding:24px;max-width:1400px;margin:auto}.headline{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}.headline h2{margin:0;font-size:26px}.headline p{margin:5px 0 0;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.stat{background:#fff;border:1px solid var(--border);border-radius:15px;padding:17px}.stat span{color:var(--muted);font-size:13px}.stat strong{display:block;font-size:27px;margin-top:6px}.toolbar{display:grid;grid-template-columns:minmax(180px,1fr) 170px 170px;gap:10px;background:#fff;border:1px solid var(--border);padding:12px;border-radius:15px;margin-bottom:15px}.toolbar input,.toolbar select{min-height:44px;border:1px solid #d0d5dd;border-radius:10px;padding:9px 11px;background:#fff}.list{display:grid;gap:11px}.item{background:#fff;border:1px solid var(--border);border-radius:15px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:15px;align-items:center}.item-title{font-size:17px;font-weight:800;margin-bottom:5px}.meta{display:flex;flex-wrap:wrap;gap:7px;color:var(--muted);font-size:12px}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#f2f4f7;color:#475467;font-weight:700}.pill.high{background:#fee2e2;color:#991b1b}.pill.medium{background:#fef3c7;color:#92400e}.pill.low{background:#dcfce7;color:#166534}.desc{color:#475467;font-size:14px;margin:9px 0}.actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.actions .btn{padding:8px 10px;font-size:13px}.empty{background:#fff;border:1px dashed #cbd5e1;border-radius:15px;padding:35px;text-align:center;color:var(--muted)}.modal-back{position:fixed;inset:0;background:rgba(16,24,40,.55);display:grid;place-items:center;padding:16px;z-index:50}.modal{width:min(680px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.modal-head h3{margin:0}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}.notice{padding:10px 12px;border-radius:10px;background:#eff6ff;color:#1e40af;font-size:13px;margin-bottom:15px}.mobile-menu{display:none}.admin-tag{font-size:11px;background:#dbeafe;color:#1e40af;padding:3px 7px;border-radius:999px;margin-left:5px}.section-title{margin:0 0 14px}.users{display:grid;gap:10px}.userrow{background:#fff;border:1px solid var(--border);border-radius:13px;padding:14px;display:flex;justify-content:space-between;gap:10px;align-items:center}.errorbar{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;padding:10px 12px;border-radius:10px;margin-bottom:14px}.loading{opacity:.6;pointer-events:none}@media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{display:none}.topbar{padding:0 15px}.mobile-menu{display:inline-flex}.content{padding:16px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar{grid-template-columns:1fr 1fr}.toolbar input{grid-column:1/-1}}@media(max-width:600px){.topbar{height:auto;min-height:64px;padding:10px 12px}.topbar .btn{padding:8px 10px}.content{padding:12px}.headline{align-items:stretch;flex-direction:column}.headline h2{font-size:23px}.headline .btn{width:100%}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:13px}.stat strong{font-size:23px}.toolbar{grid-template-columns:1fr}.toolbar input{grid-column:auto}.item{grid-template-columns:1fr;padding:14px}.actions{justify-content:stretch}.actions .btn{flex:1;min-width:90px}.grid2{grid-template-columns:1fr}.modal{padding:16px;border-radius:15px}.modal-actions{flex-direction:column-reverse}.modal-actions .btn{width:100%}.userbox small{max-width:150px}}
+.install-banner{display:none;position:sticky;top:70px;z-index:9;margin:12px 24px 0;background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;padding:12px 14px;align-items:center;justify-content:space-between;gap:12px}.install-banner.show{display:flex}.install-banner strong{display:block}.install-banner small{color:#475467}@media(max-width:900px){.install-banner{margin:10px 15px 0;top:64px}}@media(max-width:600px){.install-banner{margin:8px 12px 0;align-items:stretch;flex-direction:column;top:64px}.install-banner .btn{width:100%}}
+</style>
+</head>
+<body>
+<section id="loginView" class="login">
+  <form id="loginForm" class="login-card">
+    <div class="brand"><div class="logo">L</div><div><h1>Lista</h1><p>Organizador familiar y de trabajo</p></div></div>
+    <div class="field"><label for="email">Correo electrónico</label><input id="email" type="email" autocomplete="username" required placeholder="correo@ejemplo.com"></div>
+    <div class="field"><label for="password">Contraseña</label><input id="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
+    <button class="btn btn-primary btn-block" type="submit">Iniciar sesión</button>
+    <div id="loginMsg" class="msg" aria-live="polite"></div>
+  </form>
+</section>
+
+<section id="appView" class="shell hidden">
+  <aside class="sidebar">
+    <div class="side-brand"><strong>Lista</strong><small>Organizador compartido</small></div>
+    <nav class="nav" id="nav">
+      <button data-view="all" class="active">Inicio / Pendientes</button>
+      <button data-view="Tarea">Tareas</button>
+      <button data-view="Compra">Compras</button>
+      <button data-view="Actividad">Actividades</button>
+      <button data-view="completed">Completados</button>
+      <button data-view="users">Usuarios</button>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button id="mobileMenu" class="btn mobile-menu" type="button">Menú</button>
+      <div class="userbox"><strong id="userName">Usuario</strong><small id="userEmail"></small></div>
+      <button id="logoutBtn" class="btn" type="button">Salir</button>
+    </header>
+    <div id="installBanner" class="install-banner"><div><strong>Instala Lista en este dispositivo</strong><small>Úsala como una app desde tu pantalla de inicio.</small></div><button id="installBtn" class="btn btn-primary" type="button">Instalar app</button></div>
+    <div class="content">
+      <div id="errorBar" class="errorbar hidden"></div>
+      <section id="itemsSection">
+        <div class="headline"><div><h2 id="viewTitle">Pendientes</h2><p id="viewSubtitle">Tareas, compras y actividades del grupo.</p></div><button id="newBtn" class="btn btn-primary" type="button">+ Agregar elemento</button></div>
+        <div class="stats">
+          <div class="stat"><span>Pendientes</span><strong id="sPending">0</strong></div>
+          <div class="stat"><span>Tareas</span><strong id="sTasks">0</strong></div>
+          <div class="stat"><span>Compras</span><strong id="sBuys">0</strong></div>
+          <div class="stat"><span>Actividades</span><strong id="sActivities">0</strong></div>
+        </div>
+        <div class="toolbar"><input id="search" type="search" placeholder="Buscar por título, descripción o responsable"><select id="categoryFilter"><option value="">Todas las categorías</option><option>Familia</option><option>Trabajo</option><option>Personal</option></select><select id="priorityFilter"><option value="">Todas las prioridades</option><option value="Alta">Alta</option><option value="Media">Media</option><option value="Baja">Baja</option></select></div>
+        <div id="itemsList" class="list"></div>
+      </section>
+      <section id="usersSection" class="hidden">
+        <div class="headline"><div><h2>Usuarios</h2><p>Personas que han participado en las listas.</p></div></div>
+        <div class="notice">Las cuentas nuevas se crean desde Firebase Authentication. Al iniciar sesión por primera vez aparecerán aquí automáticamente.</div>
+        <div id="usersList" class="users"></div>
+      </section>
+    </div>
+  </main>
+</section>
+
+<div id="mobileNavModal" class="modal-back hidden"><div class="modal"><div class="modal-head"><h3>Menú</h3><button id="closeMobileMenu" class="btn" type="button">Cerrar</button></div><nav class="nav" id="mobileNav" style="background:#101828;padding:10px;border-radius:12px"><button data-view="all">Inicio / Pendientes</button><button data-view="Tarea">Tareas</button><button data-view="Compra">Compras</button><button data-view="Actividad">Actividades</button><button data-view="completed">Completados</button><button data-view="users">Usuarios</button></nav></div></div>
+
+<div id="itemModal" class="modal-back hidden">
+  <form id="itemForm" class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Nuevo elemento</h3><button id="closeModal" class="btn" type="button">Cerrar</button></div>
+    <input id="editId" type="hidden">
+    <div class="grid2"><div class="field"><label for="type">Tipo</label><select id="type" required><option>Tarea</option><option>Compra</option><option>Actividad</option></select></div><div class="field"><label for="category">Categoría</label><select id="category" required><option>Familia</option><option>Trabajo</option><option>Personal</option></select></div></div>
+    <div class="field"><label for="title">Título</label><input id="title" maxlength="120" required placeholder="Ej. Comprar material de oficina"></div>
+    <div class="field"><label for="description">Descripción</label><textarea id="description" maxlength="1000" placeholder="Detalles, indicaciones o notas"></textarea></div>
+    <div class="grid2"><div class="field"><label for="responsible">Responsable</label><input id="responsible" maxlength="100" placeholder="Nombre de la persona"></div><div class="field"><label for="priority">Prioridad</label><select id="priority"><option>Media</option><option>Alta</option><option>Baja</option></select></div></div>
+    <div class="field"><label for="dueDate">Fecha límite / fecha de actividad</label><input id="dueDate" type="date"></div>
+    <div class="modal-actions"><button id="cancelModal" class="btn" type="button">Cancelar</button><button class="btn btn-primary" type="submit">Guardar</button></div>
+  </form>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyCdEANP7K4WFYPXSf_8eVZLugahivrFbks",authDomain:"lista-f2f74.firebaseapp.com",projectId:"lista-f2f74",storageBucket:"lista-f2f74.firebasestorage.app",messagingSenderId:"227216916953",appId:"1:227216916953:web:a9a77d70869a24bec919c8"};
+const ADMIN_UID="2GdA977EysNceZwqAbkF9HHkoqN2";
+const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
+const $=id=>document.getElementById(id);
+let currentUser=null,items=[],users=[],view="all",unsubItems=null,unsubUsers=null;
+const esc=s=>String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
+const dateText=v=>{if(!v)return "Sin fecha";const [y,m,d]=v.split("-");return `${d}/${m}/${y}`};
+const userDisplay=u=>u?.displayName||u?.email?.split("@")[0]||"Usuario";
+function showError(msg=""){const e=$("errorBar");e.textContent=msg;e.classList.toggle("hidden",!msg)}
+function authError(e){const map={"auth/invalid-credential":"Correo o contraseña incorrectos.","auth/invalid-email":"El correo no es válido.","auth/too-many-requests":"Demasiados intentos. Intenta más tarde."};return map[e.code]||"No fue posible iniciar sesión."}
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginMsg").textContent="Entrando...";try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);$("loginMsg").textContent=""}catch(err){$("loginMsg").textContent=authError(err)}});
+$("logoutBtn").addEventListener("click",()=>signOut(auth));
+
+onAuthStateChanged(auth,async user=>{if(!user){currentUser=null;unsubItems?.();unsubUsers?.();$("appView").classList.add("hidden");$("loginView").classList.remove("hidden");return}currentUser=user;$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");$("userName").innerHTML=esc(userDisplay(user))+(user.uid===ADMIN_UID?' <span class="admin-tag">Administrador</span>':'');$("userEmail").textContent=user.email||"";try{await setDoc(doc(db,"users",user.uid),{uid:user.uid,email:user.email||"",name:userDisplay(user),lastSeen:serverTimestamp()}, {merge:true})}catch(e){showError("Sesión iniciada, pero no se pudo registrar el perfil. Revisa las reglas de Firestore.")}subscribeData()});
+function subscribeData(){unsubItems?.();unsubUsers?.();unsubItems=onSnapshot(collection(db,"items"),snap=>{items=snap.docs.map(d=>({id:d.id,...d.data()}));render()},e=>showError("No se pudieron leer las listas de Firestore. Revisa las reglas publicadas."));unsubUsers=onSnapshot(collection(db,"users"),snap=>{users=snap.docs.map(d=>({id:d.id,...d.data()}));renderUsers()},e=>console.error(e))}
+function setView(v){view=v;document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===v));$("mobileNavModal").classList.add("hidden");if(v==="users"){$("itemsSection").classList.add("hidden");$("usersSection").classList.remove("hidden");renderUsers();return}$("usersSection").classList.add("hidden");$("itemsSection").classList.remove("hidden");const titles={all:["Pendientes","Tareas, compras y actividades del grupo."],Tarea:["Tareas","Tareas pendientes del grupo."],Compra:["Compras","Compras pendientes del grupo."],Actividad:["Actividades","Actividades pendientes del grupo."],completed:["Completados","Historial de elementos terminados."]};$("viewTitle").textContent=titles[v][0];$("viewSubtitle").textContent=titles[v][1];$("newBtn").classList.toggle("hidden",v==="completed");render()}
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
+$("mobileMenu").addEventListener("click",()=>$("mobileNavModal").classList.remove("hidden"));$("closeMobileMenu").addEventListener("click",()=>$("mobileNavModal").classList.add("hidden"));
+[$("search"),$("categoryFilter"),$("priorityFilter")].forEach(el=>el.addEventListener(el.tagName==="INPUT"?"input":"change",render));
+function render(){const pending=items.filter(x=>x.status!=="completed");$("sPending").textContent=pending.length;$("sTasks").textContent=pending.filter(x=>x.type==="Tarea").length;$("sBuys").textContent=pending.filter(x=>x.type==="Compra").length;$("sActivities").textContent=pending.filter(x=>x.type==="Actividad").length;let data=items.filter(x=>view==="completed"?x.status==="completed":x.status!=="completed");if(["Tarea","Compra","Actividad"].includes(view))data=data.filter(x=>x.type===view);const q=$("search").value.trim().toLowerCase(),cat=$("categoryFilter").value,pri=$("priorityFilter").value;if(q)data=data.filter(x=>[x.title,x.description,x.responsible,x.createdByName].join(" ").toLowerCase().includes(q));if(cat)data=data.filter(x=>x.category===cat);if(pri)data=data.filter(x=>x.priority===pri);data.sort((a,b)=>(a.dueDate||"9999").localeCompare(b.dueDate||"9999"));$("itemsList").innerHTML=data.length?data.map(card).join(""):'<div class="empty">No hay elementos para mostrar.</div>';document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>act(b.dataset.action,b.dataset.id)))}
+function card(x){const completed=x.status==="completed";return `<article class="item"><div><div class="item-title">${esc(x.title||"Sin título")}</div><div class="meta"><span class="pill">${esc(x.type||"")}</span><span class="pill">${esc(x.category||"")}</span><span class="pill ${(x.priority||"").toLowerCase()}">${esc(x.priority||"Media")}</span><span class="pill">Fecha: ${dateText(x.dueDate)}</span></div>${x.description?`<div class="desc">${esc(x.description)}</div>`:""}<div class="meta"><span>Responsable: <b>${esc(x.responsible||"Sin asignar")}</b></span><span>Creado por: <b>${esc(x.createdByName||x.createdByEmail||"Usuario")}</b></span>${completed?`<span>Completado por: <b>${esc(x.completedByName||"Usuario")}</b></span>`:""}</div></div><div class="actions">${completed?`<button class="btn btn-success" data-action="reopen" data-id="${x.id}">Reabrir</button>`:`<button class="btn btn-success" data-action="complete" data-id="${x.id}">Completar</button><button class="btn" data-action="edit" data-id="${x.id}">Editar</button>`}<button class="btn btn-danger" data-action="delete" data-id="${x.id}">Eliminar</button></div></article>`}
+function openModal(x=null){$("itemForm").reset();$("editId").value=x?.id||"";$("modalTitle").textContent=x?"Editar elemento":"Nuevo elemento";if(x){$("type").value=x.type||"Tarea";$("category").value=x.category||"Familia";$("title").value=x.title||"";$("description").value=x.description||"";$("responsible").value=x.responsible||"";$("priority").value=x.priority||"Media";$("dueDate").value=x.dueDate||""}else if(["Tarea","Compra","Actividad"].includes(view))$("type").value=view;$("itemModal").classList.remove("hidden")}
+function closeModal(){$("itemModal").classList.add("hidden")}
+$("newBtn").addEventListener("click",()=>openModal());$("closeModal").addEventListener("click",closeModal);$("cancelModal").addEventListener("click",closeModal);
+$("itemForm").addEventListener("submit",async e=>{e.preventDefault();if(!currentUser)return;const id=$("editId").value;const data={type:$("type").value,category:$("category").value,title:$("title").value.trim(),description:$("description").value.trim(),responsible:$("responsible").value.trim(),priority:$("priority").value,dueDate:$("dueDate").value,updatedAt:serverTimestamp(),updatedByUid:currentUser.uid,updatedByName:userDisplay(currentUser)};if(!data.title)return;try{if(id)await updateDoc(doc(db,"items",id),data);else await addDoc(collection(db,"items"),{...data,status:"pending",createdAt:serverTimestamp(),createdByUid:currentUser.uid,createdByName:userDisplay(currentUser),createdByEmail:currentUser.email||""});closeModal();showError("")}catch(err){showError("No se pudo guardar. Revisa tu conexión y las reglas de Firestore.")}});
+async function act(action,id){const x=items.find(i=>i.id===id);if(!x)return;try{if(action==="edit")return openModal(x);if(action==="complete")await updateDoc(doc(db,"items",id),{status:"completed",completedAt:serverTimestamp(),completedByUid:currentUser.uid,completedByName:userDisplay(currentUser)});if(action==="reopen")await updateDoc(doc(db,"items",id),{status:"pending",completedAt:null,completedByUid:null,completedByName:null});if(action==="delete"&&confirm(`¿Eliminar definitivamente “${x.title}”?`))await deleteDoc(doc(db,"items",id))}catch(e){showError("No se pudo realizar la acción en Firebase.")}}
+function renderUsers(){$("usersList").innerHTML=users.length?users.map(u=>`<div class="userrow"><div><strong>${esc(u.name||u.email||"Usuario")}</strong><div class="meta">${esc(u.email||"")}</div></div>${u.uid===ADMIN_UID?'<span class="admin-tag">Administrador</span>':'<span class="pill">Usuario</span>'}</div>`).join(""):'<div class="empty">Todavía no hay usuarios registrados en Firestore.</div>'}
+</script>
+<script>
+let deferredInstallPrompt=null;
+const installBanner=document.getElementById('installBanner');
+const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;installBanner?.classList.add('show');});
+installBtn?.addEventListener('click',async()=>{if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;installBanner.classList.remove('show');});
+window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;installBanner?.classList.remove('show');});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.error));}
+</script>
+</body>
+</html>
