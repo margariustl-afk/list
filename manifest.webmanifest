@@ -1,8 +1,8 @@
 {
   "name": "Lista - Organizador compartido",
   "short_name": "Lista",
-  "description": "Organizador compartido de tareas, compras y actividades familiares y de trabajo.",
-  "start_url": "./",
+  "description": "Tareas, compras y actividades familiares y de trabajo.",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f7fb",
