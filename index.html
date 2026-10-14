@@ -102,6 +102,12 @@ import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, delet
 const firebaseConfig={apiKey:"AIzaSyCdEANP7K4WFYPXSf_8eVZLugahivrFbks",authDomain:"lista-f2f74.firebaseapp.com",projectId:"lista-f2f74",storageBucket:"lista-f2f74.firebasestorage.app",messagingSenderId:"227216916953",appId:"1:227216916953:web:a9a77d70869a24bec919c8"};
 const ADMIN_UID="2GdA977EysNceZwqAbkF9HHkoqN2";
 const FIXED_ROLES={"2GdA977EysNceZwqAbkF9HHkoqN2":"main_admin","BjuHbZ4AgiZTk6HBsqSe7BXXm4r1":"admin","6hZvMAxg8GNn2uQdxNYoDifLebI3":"user","8LVTfmR5hrPzGFbz03GSw85jb762":"reader"};
+const FIXED_USERS=[
+ {uid:"2GdA977EysNceZwqAbkF9HHkoqN2",name:"hola",email:"hola@hola.com",role:"main_admin",active:true,group:"both"},
+ {uid:"BjuHbZ4AgiZTk6HBsqSe7BXXm4r1",name:"Administrador",email:"Administrador",role:"admin",active:true,group:"both"},
+ {uid:"6hZvMAxg8GNn2uQdxNYoDifLebI3",name:"Usuario",email:"usuario@usuario.com",role:"user",active:true,group:"both"},
+ {uid:"8LVTfmR5hrPzGFbz03GSw85jb762",name:"Lector",email:"lector@lector.com",role:"reader",active:true,group:"both"}
+];
 const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
 const $=id=>document.getElementById(id);
 let currentUser=null,currentProfile=null,items=[],users=[],view="all",unsubItems=null,unsubUsers=null; const WHATSAPP_NUMBER="5213316355531";
@@ -111,7 +117,7 @@ const userDisplay=u=>u?.displayName||u?.email?.split("@")[0]||"Usuario";
 function showError(msg=""){const e=$("errorBar");e.textContent=msg;e.classList.toggle("hidden",!msg);if(msg)setMonitor("error",msg)}
 function setChip(id,text,state=""){const el=$(id);if(!el)return;el.className="statuschip"+(state?" "+state:"");el.innerHTML=(id!=="opStatus"?'<span class="dot"></span> ':'')+esc(text)}
 function setMonitor(kind,text=""){if(kind==="busy"){setChip("fbStatus","Firebase conectado","ok");setChip("syncStatus","Consultando / sincronizando","busy");setChip("opStatus",text||"Procesando...","busy")}else if(kind==="ok"){setChip("fbStatus","Firebase conectado","ok");setChip("syncStatus","Datos sincronizados","ok");setChip("opStatus",text||"Sin errores","ok")}else if(kind==="error"){setChip("fbStatus","Firebase con error","bad");setChip("syncStatus","Revisar conexión o permisos","bad");setChip("opStatus",text||"Error","bad")}}
-function roleOf(){return FIXED_ROLES[currentUser?.uid]||currentProfile?.role||"user"}
+function roleOf(){return FIXED_ROLES[currentUser?.uid]||"user"}
 function canWrite(){return roleOf()==="main_admin"||roleOf()==="admin"||roleOf()==="user"}
 function canAdmin(){return roleOf()==="main_admin"||roleOf()==="admin"}
 function canDelete(){return canAdmin()}
@@ -123,20 +129,16 @@ $("switchUserBtn").addEventListener("click",()=>closeSession(true));
 
 onAuthStateChanged(auth,async user=>{
   if(!user){currentUser=null;currentProfile=null;unsubItems?.();unsubUsers?.();$("appView").classList.add("hidden");$("loginView").classList.remove("hidden");setChip("authStatus","Sin sesión","");setMonitor("ok","Listo para iniciar sesión");return}
-  currentUser=user;$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");setChip("authStatus","Sesión activa","ok");setMonitor("busy","Validando perfil...");
-  try{
-    const ref=doc(db,"users",user.uid); const snap=await getDoc(ref);
-    if(!snap.exists()){const fixedRole=FIXED_ROLES[user.uid]||"user";const profile={uid:user.uid,email:user.email||"",name:userDisplay(user),role:fixedRole,active:true,group:"both",createdAt:serverTimestamp()};await setDoc(ref,profile);currentProfile=profile}else currentProfile={id:snap.id,...snap.data()};
-    if(FIXED_ROLES[user.uid]){currentProfile={...currentProfile,role:FIXED_ROLES[user.uid],active:true}}
-    $("userName").innerHTML=esc(userDisplay(user))+(user.uid===ADMIN_UID?' <span class="admin-tag">Principal</span>':` <span class="admin-tag">${esc(roleLabel(roleOf()))}</span>`);$("userEmail").textContent=user.email||"";
-    subscribeData();
-  }catch(e){showError("Sesión iniciada, pero no se pudo validar el perfil. Revisa las reglas de Firestore.")}
+  currentUser=user;currentProfile={uid:user.uid,email:user.email||"",name:userDisplay(user),role:roleOf(),active:true,group:"both"};
+  $("loginView").classList.add("hidden");$("appView").classList.remove("hidden");setChip("authStatus","Sesión activa","ok");setMonitor("busy","Consultando Firebase...");
+  $("userName").innerHTML=esc(userDisplay(user))+(user.uid===ADMIN_UID?' <span class="admin-tag">Principal</span>':` <span class="admin-tag">${esc(roleLabel(roleOf()))}</span>`);$("userEmail").textContent=user.email||"";
+  setView("all");subscribeData();
 });
 function roleLabel(r){return r==="main_admin"?"Administrador principal":r==="admin"?"Administrador":r==="reader"?"Lector":"Usuario"}
 function subscribeData(){
   unsubItems?.();unsubUsers?.();setMonitor("busy","Consultando Firestore...");
   unsubItems=onSnapshot(collection(db,"items"),snap=>{items=snap.docs.map(d=>({id:d.id,...d.data()}));render();setMonitor("ok","Sin errores")},e=>showError("No se pudieron leer las listas de Firestore. Revisa las reglas publicadas."));
-  unsubUsers=onSnapshot(collection(db,"users"),snap=>{users=snap.docs.map(d=>({id:d.id,...d.data()}));currentProfile=users.find(u=>(u.uid||u.id)===currentUser?.uid)||currentProfile;renderUsers();fillResponsible();render();setMonitor("ok","Sin errores")},e=>showError("No se pudieron leer los usuarios de Firestore."));
+  unsubUsers=onSnapshot(collection(db,"users"),snap=>{const stored=snap.docs.map(d=>({id:d.id,...d.data()}));const byUid=new Map(FIXED_USERS.map(u=>[u.uid,{...u}]));stored.forEach(u=>{const uid=u.uid||u.id;if(byUid.has(uid))byUid.set(uid,{...byUid.get(uid),...u,role:FIXED_ROLES[uid]||u.role||"user",active:true});else byUid.set(uid,{...u,uid,role:FIXED_ROLES[uid]||"user"})});users=[...byUid.values()];renderUsers();fillResponsible();render();setMonitor("ok","Sin errores")},e=>{users=[...FIXED_USERS];renderUsers();fillResponsible();render();setMonitor("ok","Conectado · usuarios locales")});
 }
 function setView(v){view=v;document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===v));$("mobileNavModal").classList.add("hidden");if(v==="users"){$("itemsSection").classList.add("hidden");$("usersSection").classList.remove("hidden");renderUsers();return}$("usersSection").classList.add("hidden");$("itemsSection").classList.remove("hidden");const titles={all:["Pendientes","Tareas, compras y actividades del grupo."],Tarea:["Tareas","Tareas pendientes del grupo."],Compra:["Compras","Selecciona compras y envíalas por WhatsApp."],Actividad:["Actividades","Actividades pendientes del grupo."],completed:["Completados","Historial de elementos terminados."],mine:["Mis pendientes","Elementos asignados a tu usuario."]};$("viewTitle").textContent=titles[v][0];$("viewSubtitle").textContent=titles[v][1];$("newBtn").classList.toggle("hidden",v==="completed"||!canWrite());$("waBtn").classList.toggle("hidden",v!=="Compra"||!canWrite());render()}
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
@@ -167,9 +169,9 @@ function renderUsers(){
   $("usersList").innerHTML=sorted.length?sorted.map(u=>{const uid=u.uid||u.id,main=uid===ADMIN_UID;return `<div class="userrow"><div><strong>${esc(u.name||u.email||"Usuario")}</strong><div class="meta">${esc(u.email||"")} · ${u.active===false?"Suspendido":"Activo"} · ${main?"Administrador principal":roleLabel(u.role)}</div><div class="uid">${esc(uid)}</div></div><span class="pill">${main?"Principal":roleLabel(u.role)}</span></div>`}).join(""):'<div class="empty">Todavía no hay usuarios registrados en Firestore.</div>';
   updateSelectedUser();
 }
-function updateSelectedUser(){const uid=$("userAccountSelect").value,u=users.find(x=>(x.uid||x.id)===uid);if(!u){$("selectedUserInfo").textContent="Selecciona una cuenta para ver sus datos.";return}const main=uid===ADMIN_UID;$("userRoleSelect").value=main?"admin":(u.role||"user");$("userActiveSelect").value=main?"true":String(u.active!==false);$("userGroupSelect").value=u.group||"both";$("userRoleSelect").disabled=!canAdmin()||main;$("userActiveSelect").disabled=!canAdmin()||main;$("userGroupSelect").disabled=!canAdmin();$("saveUserBtn").disabled=!canAdmin()||main;$("selectedUserInfo").innerHTML=`<b>${esc(u.name||"Usuario")}</b> · ${esc(u.email||"")}<br><span class="uid">UID: ${esc(uid)}</span>${main?"<br>Cuenta protegida: Administrador principal.":""}`}
+function updateSelectedUser(){const uid=$("userAccountSelect").value,u=users.find(x=>(x.uid||x.id)===uid);if(!u){$("selectedUserInfo").textContent="Selecciona una cuenta para ver sus datos.";return}const main=uid===ADMIN_UID;$("userRoleSelect").value=main?"admin":(u.role||"user");$("userActiveSelect").value=main?"true":String(u.active!==false);$("userGroupSelect").value=u.group||"both";$("userRoleSelect").disabled=true;$("userActiveSelect").disabled=true;$("userGroupSelect").disabled=true;$("saveUserBtn").disabled=true;$("selectedUserInfo").innerHTML=`<b>${esc(u.name||"Usuario")}</b> · ${esc(u.email||"")}<br><span class="uid">UID: ${esc(uid)}</span>${main?"<br>Cuenta protegida: Administrador principal.":""}`}
 $("userAccountSelect").addEventListener("change",updateSelectedUser);
-$("saveUserBtn").addEventListener("click",async()=>{const uid=$("userAccountSelect").value;if(!uid||!canAdmin()||uid===ADMIN_UID)return;setMonitor("busy","Guardando permisos...");try{await updateDoc(doc(db,"users",uid),{role:$("userRoleSelect").value,active:$("userActiveSelect").value==="true",group:$("userGroupSelect").value});setMonitor("ok","Permisos actualizados")}catch(e){showError("No se pudieron actualizar los permisos del usuario.")}});
+$("saveUserBtn").addEventListener("click",()=>showError("Los roles de esta versión están definidos por UID en la aplicación."));
 $("waBtn").addEventListener("click",()=>{let selected=[...document.querySelectorAll(".buy-check:checked")].map(x=>x.value);let buys=items.filter(x=>x.type==="Compra"&&x.status!=="completed"&&(selected.length===0||selected.includes(x.id)));if(!buys.length){showError("No hay compras pendientes para enviar.");return}const lines=buys.map((x,i)=>`${i+1}. ${x.title}${x.responsible?` — Responsable: ${x.responsible}`:""}${x.dueDate?` — ${dateText(x.dueDate)}`:""}`);const msg=`🛒 LISTA DE COMPRAS\n\n${lines.join("\n")}\n\nPendientes: ${buys.length}\nEnviado desde Lista PWA`;window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank","noopener")});
 </script>
 <script>
