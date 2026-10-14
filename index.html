@@ -22,7 +22,7 @@
     <div class="brand"><div class="logo">L</div><div><h1>Lista</h1><p>Organizador familiar y de trabajo</p></div></div>
     <div class="field"><label for="email">Correo electrónico</label><input id="email" type="email" autocomplete="username" required placeholder="correo@ejemplo.com"></div>
     <div class="field"><label for="password">Contraseña</label><input id="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
-    <button class="btn btn-primary btn-block" type="submit">Iniciar sesión</button>
+    <label style="display:flex;align-items:center;gap:9px;margin:4px 0 14px;font-size:14px"><input id="keepSession" type="checkbox" checked style="width:18px;height:18px"> Mantener sesión iniciada en este dispositivo</label><button class="btn btn-primary btn-block" type="submit">Iniciar sesión</button>
     <div id="loginMsg" class="msg" aria-live="polite"></div>
   </form>
 </section>
@@ -43,7 +43,7 @@
     <header class="topbar">
       <button id="mobileMenu" class="btn mobile-menu" type="button">Menú</button>
       <div class="userbox"><strong id="userName">Usuario</strong><small id="userEmail"></small></div>
-      <button id="logoutBtn" class="btn" type="button">Salir</button>
+      <div class="actions"><button id="switchUserBtn" class="btn" type="button">Cambiar usuario</button><button id="logoutBtn" class="btn" type="button">Cerrar sesión</button></div>
     </header>
     <div class="statusbar" aria-live="polite"><span id="fbStatus" class="statuschip busy"><span class="dot"></span> Firebase: iniciando</span><span id="authStatus" class="statuschip"><span class="dot"></span> Sesión</span><span id="syncStatus" class="statuschip"><span class="dot"></span> Esperando datos</span><span id="opStatus" class="statuschip">Sin operaciones</span></div>
     <div id="installBanner" class="install-banner"><div><strong>Instala Lista en este dispositivo</strong><small>Úsala como una app desde tu pantalla de inicio.</small></div><button id="installBtn" class="btn btn-primary" type="button">Instalar app</button></div>
@@ -96,7 +96,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 const firebaseConfig={apiKey:"AIzaSyCdEANP7K4WFYPXSf_8eVZLugahivrFbks",authDomain:"lista-f2f74.firebaseapp.com",projectId:"lista-f2f74",storageBucket:"lista-f2f74.firebasestorage.app",messagingSenderId:"227216916953",appId:"1:227216916953:web:a9a77d70869a24bec919c8"};
@@ -115,11 +115,13 @@ function canWrite(){return roleOf()==="main_admin"||roleOf()==="admin"||roleOf()
 function canAdmin(){return roleOf()==="main_admin"||roleOf()==="admin"}
 function canDelete(){return canAdmin()}
 function authError(e){const map={"auth/invalid-credential":"Correo o contraseña incorrectos.","auth/invalid-email":"El correo no es válido.","auth/too-many-requests":"Demasiados intentos. Intenta más tarde."};return map[e.code]||"No fue posible iniciar sesión."}
-$("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginMsg").textContent="Entrando...";try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);$("loginMsg").textContent=""}catch(err){$("loginMsg").textContent=authError(err)}});
-$("logoutBtn").addEventListener("click",()=>signOut(auth));
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginMsg").textContent="Autenticando...";setChip("authStatus","Autenticando","busy");try{await setPersistence(auth,$("keepSession").checked?browserLocalPersistence:browserSessionPersistence);await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);$("loginMsg").textContent=""}catch(err){$("loginMsg").textContent=authError(err);setChip("authStatus","Sin sesión","bad")}});
+async function closeSession(changeUser=false){try{setChip("authStatus","Cerrando sesión...","busy");setMonitor("busy",changeUser?"Preparando cambio de usuario...":"Cerrando sesión...");await signOut(auth);$("password").value="";if(changeUser){$("email").value="";setTimeout(()=>$("email").focus(),50)}else setTimeout(()=>$("email").focus(),50)}catch(e){showError("No se pudo cerrar la sesión.")}}
+$("logoutBtn").addEventListener("click",()=>closeSession(false));
+$("switchUserBtn").addEventListener("click",()=>closeSession(true));
 
 onAuthStateChanged(auth,async user=>{
-  if(!user){currentUser=null;currentProfile=null;unsubItems?.();unsubUsers?.();$("appView").classList.add("hidden");$("loginView").classList.remove("hidden");return}
+  if(!user){currentUser=null;currentProfile=null;unsubItems?.();unsubUsers?.();$("appView").classList.add("hidden");$("loginView").classList.remove("hidden");setChip("authStatus","Sin sesión","");setMonitor("ok","Listo para iniciar sesión");return}
   currentUser=user;$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");setChip("authStatus","Sesión activa","ok");setMonitor("busy","Validando perfil...");
   try{
     const ref=doc(db,"users",user.uid); const snap=await getDoc(ref);
